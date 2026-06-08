@@ -98,5 +98,3 @@ or
 ```
 
 The NodeMCU will receive the broadcast packet, activate the MOSFET to power the L298N, drive the high-torque motor in the specified direction for 3 seconds to press the button, and then safely power down the driver back into sleep mode. You can track execution details live via the Arduino IDE Serial Monitor.
-
-```
