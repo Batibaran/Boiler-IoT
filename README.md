@@ -57,22 +57,6 @@ The NodeMCU keeps the MOSFET turned off by default, completely disconnecting the
 
 ---
 
-## Project Structure
-
-
-```
-
-smart-home/
-├── raspberry_pi_sender/
-│   └── sender.py
-├── nodemcu_receiver/
-│   └── receiver.ino
-└── README.md
-
-```
-
----
-
 ## Firmware & Software Setup
 
 ### 1. NodeMCU Receiver Setup
