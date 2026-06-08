@@ -11,9 +11,9 @@ The system uses a **Raspberry Pi** as a UDP broadcaster to send commands over th
 ## Hardware Architecture
 
 ### Power Management Innovation
-Standard motor drivers like the L298N draw significant quiescent current even when idle, draining a standard 9V battery in about 2 days. To solve this, this circuit integrates an **IRF3205 N-channel MOSFET** as a high-side/low-side power gate. 
+Standard motor drivers like the L298N draw significant quiescent current even when idle, draining power. To solve this, this circuit integrates an **IRF3205 N-channel MOSFET** as a high-side/low-side power gate. 
 
-The NodeMCU keeps the MOSFET turned off by default, completely disconnecting the L298N from the battery ground. The NodeMCU only pulls the MOSFET Gate `HIGH` when a command is received, switching the L298N on for a brief 3-second window to run the motor. This power-saving design extends battery life from **2 days to potentially over 6 months**.
+The NodeMCU keeps the MOSFET turned off by default, completely disconnecting the L298N from the power supply ground. The NodeMCU only pulls the MOSFET Gate `HIGH` when a command is received, switching the L298N on for a brief 3-second window to run the motor.
 
 ### Components List
 
@@ -23,9 +23,9 @@ The NodeMCU keeps the MOSFET turned off by default, completely disconnecting the
 | **Server / Controller** | Raspberry Pi | Acts as the UDP network broadcaster |
 | **Motor Driver** | L298N Module | Controls the direction of the DC motor |
 | **Actuator** | Low-RPM, High-Torque DC Motor | Physically presses the boiler buttons |
-| **Power Gate** | IRF3205 N-channel MOSFET | Cuts off L298N ground when idle to save battery |
+| **Power Gate** | IRF3205 N-channel MOSFET | Cuts off L298N ground when idle to save power |
 | **Gate Resistor** | 1 kΩ | Placed between NodeMCU GPIO and MOSFET Gate |
-| **Power Supply** | 9V Battery | Powers the L298N driver and DC motor |
+| **Power Supply** | Variable DC Power Supply | Powers the whole system |
 
 ### Wiring Connections
 
@@ -34,11 +34,11 @@ The NodeMCU keeps the MOSFET turned off by default, completely disconnecting the
 * NodeMCU `D2` -> L298N `IN2`
 
 **Power Gate Circuit:**
-* 9V Battery `(+)` -> L298N `VCC`
-* 9V Battery `(-)` -> IRF3205 MOSFET `Drain` pin
+* 9V DC `(+)` -> L298N `VCC`
+* 9V DC `(-)` -> IRF3205 MOSFET `Drain` pin
 * IRF3205 `Source` pin -> L298N `GND`
 * NodeMCU `D3` -> 1kΩ resistor -> IRF3205 `Gate` pin
-* NodeMCU `GND` -> 9V Battery `(-)` (Establishes a common ground)
+* NodeMCU `GND` -> 9V DC `(-)` (Establishes a common ground)
 
 **Motor Output:**
 * Motor terminals -> L298N `OUT1` and `OUT2`
@@ -82,7 +82,7 @@ The NodeMCU keeps the MOSFET turned off by default, completely disconnecting the
 
 ## Execution
 
-1. Power on the NodeMCU and connect the 9V battery to the motor driver circuit.
+1. Power on the NodeMCU and connect the 9V DC to the motor driver circuit.
 2. Open a terminal on your Raspberry Pi and execute the sender script with the desired command argument:
 
 ```bash
